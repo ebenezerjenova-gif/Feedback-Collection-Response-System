@@ -1,0 +1,322 @@
+{
+  "name": "Feedback Collection & Response System",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Customer/User Feedback",
+        "formDescription": "Kindly fill this form Correctly",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Uid",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Phone Number",
+              "fieldType": "number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Delivery Date",
+              "fieldType": "date",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Customer Ratings",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "5"
+                  },
+                  {
+                    "option": "4"
+                  },
+                  {
+                    "option": "3"
+                  },
+                  {
+                    "option": "2"
+                  },
+                  {
+                    "option": "1"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Customer Feedback",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        0
+      ],
+      "id": "fd2ff43e-77b3-4931-8c2b-7184e8c702a2",
+      "name": "On form submission",
+      "webhookId": "471b2000-194b-4a66-afc3-d9f99d207ddd"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "39eeef44-36ee-49c2-85c0-a9b1ce07daec",
+              "name": "Uid",
+              "value": "={{ $json.Uid }}",
+              "type": "number"
+            },
+            {
+              "id": "432f505a-e51e-48dd-9756-0dcc6c552f17",
+              "name": "Name",
+              "value": "={{ $json.Name }}",
+              "type": "string"
+            },
+            {
+              "id": "466186d0-5c7d-4a2c-9484-dbe20a61b1f4",
+              "name": "Email",
+              "value": "={{ $json.Email }}",
+              "type": "string"
+            },
+            {
+              "id": "5c20a874-1995-414d-8fea-ced173a5e9a4",
+              "name": "Phone Number",
+              "value": "={{ $json['Phone Number'] }}",
+              "type": "number"
+            },
+            {
+              "id": "fcfdc444-689a-4b42-8034-6f3f7b0b5e15",
+              "name": "Delivery Date",
+              "value": "={{ $json['Delivery Date'] }}",
+              "type": "string"
+            },
+            {
+              "id": "db08e57c-894a-4aa9-b834-75f9de9e2405",
+              "name": "Customer Ratings",
+              "value": "={{ $json['Customer Ratings'] }}",
+              "type": "number"
+            },
+            {
+              "id": "9785f0a8-cbda-45ee-9ed7-d8c695900c92",
+              "name": "Customer Feedback",
+              "value": "={{ $json['Customer Feedback'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e873b6af-aed2-4265-9ab7-e5b3bec557e2",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Write a highly professional and polite thank-you email.\n\nThe email must:\n- Address the user by their name\n- Thank them sincerely for their valuable feedback\n- Maintain a formal and respectful tone\n- Be concise and well-structured\n- End with a professional closing\nBest regards,\nJenova\nCustomer Support Specialist  \nEJ Solutions Pvt. Ltd.  \nebenezerjenova9791@gmail.com  \nwww.ejsolutions.com\n\nUser Details:\nName: {{ $json.Name }}\nEmail: {{ $json.Email }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "966ea2cc-6bd0-459e-83d3-426b033492d7",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        512,
+        192
+      ],
+      "id": "29537bed-dc34-40f0-b6dc-9880630bbe78",
+      "name": "Mistral Cloud Chat Model",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "iHiNtYrUyRyOEtAg",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "tableId": "User Registration Form Details",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "UId",
+              "fieldValue": "={{ $json.Uid }}"
+            },
+            {
+              "fieldId": "Name",
+              "fieldValue": "={{ $json.Name }}"
+            },
+            {
+              "fieldId": "Email",
+              "fieldValue": "={{ $json.Email }}"
+            },
+            {
+              "fieldId": "Phone Number",
+              "fieldValue": "={{ $json['Phone Number'] }}"
+            },
+            {
+              "fieldId": "Delivery Date",
+              "fieldValue": "={{ $json['Delivery Date'] }}"
+            },
+            {
+              "fieldId": "Ratings",
+              "fieldValue": "={{ $json['Customer Ratings'] }}"
+            },
+            {
+              "fieldId": "Customer Feedback",
+              "fieldValue": "={{ $json['Customer Feedback'] }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "0c4f3ff5-3fe6-4cd0-9461-c548b0e7d514",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "9MteS9B599I5lxlI",
+          "name": "E Commerce DB API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        848,
+        192
+      ],
+      "id": "b839d48e-ea9e-410b-a3ae-17a43032e144",
+      "name": "Send a message in Gmail",
+      "webhookId": "e1ae72ac-d84b-4e19-ab1b-64bec9ec4675",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ZvbQKDix5b3h955C",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Mistral Cloud Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e3a30da6-dd79-447c-9c22-0125ff913ad8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0014f6159574d5a6d32ff637b744a22d6babf5dd9a117ee585233a7d5832b991"
+  },
+  "nodeGroups": [],
+  "id": "BjRAgpPRSEwS7X3S",
+  "tags": []
+}
